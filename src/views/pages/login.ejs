@@ -1,0 +1,406 @@
+<div class="login-page">
+    <div class="row">
+        <!-- COLUMNA IZQUIERDA CON IMÁGENES -->
+        <div class="col-md-7 login-left-column">
+            <!-- BOTONES MÁS GRANDES -->
+            <div class="botones-horizontales">
+                <button class="btn-ver-mas">Ver más</button>
+                <button class="btn-comprar-ahora">Comprar ahora</button>
+            </div>
+            
+            <!-- GALLERÍA DE IMÁGENES -->
+            <div class="imagenes-gallery mb-4">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="imagen-container">
+                            <img src="/images/login/login-gato.png" 
+                                 alt="Gato feliz" 
+                                 class="img-fluid rounded shadow">
+                            <div class="imagen-overlay">
+                                <p class="mb-0">Para Gatos</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="imagen-container">
+                            <img src="/images/login/login-perico.png" 
+                                 alt="Perico colorido" 
+                                 class="img-fluid rounded shadow">
+                            <div class="imagen-overlay">
+                                <p class="mb-0">Para Aves</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="imagen-container">
+                            <img src="/images/login/login-perro.png" 
+                                 alt="Perro juguetón" 
+                                 class="img-fluid rounded shadow">
+                            <div class="imagen-overlay">
+                                <p class="mb-0">Para Perros</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- WHATSAPP INFO -->
+            <div class="whatsapp-info">
+                <p>
+                    <i class="fab fa-whatsapp"></i>
+                    Pedidos por WhatsApp: 310 354 7794
+                </p>
+            </div>
+        </div>
+        
+        <!-- COLUMNA DERECHA CON FORMULARIO -->
+        <div class="col-md-5 login-right-column">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Iniciar Sesión</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Mostrar mensaje de éxito después de registro -->
+                    <% if (typeof success !== 'undefined' && success) { %>
+                        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-check-circle me-2 fa-lg" style="color: #28a745;"></i>
+                                <div>
+                                    <strong class="me-2">¡Registro exitoso!</strong>
+                                    <span class="text-muted"><%= success %></span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                    
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <% } %>
+                    
+                    <form action="/login" method="POST">
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Correo:</label>
+                            <input type="email" 
+                                   name="email" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ingresar correo electrónico"
+                                   required
+                                   autocomplete="email">
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Contraseña:</label>
+                            <input type="password" 
+                                   name="password" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ingresar contraseña"
+                                   required
+                                   autocomplete="current-password">
+                        </div>
+                        
+                        <div class="text-end mb-4">
+                            <a href="#" class="text-decoration-none" style="color: #00AFC4;">
+                                <i class="fas fa-key me-1"></i> ¿Olvidaste tu contraseña?
+                            </a>
+                        </div>
+                        
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-login-submit btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i> Iniciar Sesión
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">
+                                ¿Aún no tienes una cuenta? 
+                                <a href="/register" class="text-decoration-none fw-bold ms-1" style="color: #00AFC4;">
+                                    <i class="fas fa-user-plus me-1"></i> Registrarse
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ESTILOS PARA IMÁGENES EN LOGIN */
+.imagenes-gallery {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.imagen-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    height: 200px;
+    transition: all 0.3s;
+}
+
+.imagen-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.imagen-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.imagen-container:hover img {
+    transform: scale(1.05);
+}
+
+.imagen-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 175, 196, 0.9);
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 0 0 12px 12px;
+}
+
+/* BOTONES VER MÁS Y COMPRAR AHORA */
+.botones-horizontales {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.btn-ver-mas, .btn-comprar-ahora {
+    flex: 1;
+    min-width: 150px;
+    max-width: 180px;
+    padding: 14px 25px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 25px;
+    border: none;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.btn-ver-mas {
+    background-color: #779037;
+    color: white;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-comprar-ahora {
+    background-color: #8E6B4F;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.btn-ver-mas:hover, .btn-comprar-ahora:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* WHATSAPP INFO */
+.whatsapp-info {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-top: 10px;
+}
+
+.whatsapp-info p {
+    color: #333;
+    font-size: 18px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.whatsapp-info .fa-whatsapp {
+    color: #25d366;
+    font-size: 32px;
+    background: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+}
+
+/* CARD LOGIN */
+.login-right-column .card {
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.login-right-column .card-header {
+    background-color: #00AFC4;
+    border-bottom: none;
+    padding: 20px !important;
+    border-radius: 25px 25px 0 0;
+}
+
+.login-right-column .card-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 26px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.login-right-column .card-body {
+    padding: 30px !important;
+    border-radius: 0 0 25px 25px;
+}
+
+/* BOTÓN INICIAR SESIÓN */
+.btn-login-submit {
+    background-color: #00AFC4;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 25px;
+    width: 100%;
+    transition: all 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 175, 196, 0.3);
+}
+
+.btn-login-submit:hover {
+    background-color: #0095a8;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 175, 196, 0.4);
+}
+
+/* ALERTAS */
+.alert {
+    border-radius: 12px;
+    border: none;
+    padding: 15px 20px;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .imagen-container {
+        height: 150px;
+    }
+    
+    .imagen-overlay {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .botones-horizontales {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .btn-ver-mas, .btn-comprar-ahora {
+        max-width: 220px;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+    
+    .whatsapp-info p {
+        flex-direction: column;
+        gap: 8px;
+        font-size: 16px;
+    }
+    
+    .whatsapp-info .fa-whatsapp {
+        font-size: 28px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .login-right-column .card-header h3 {
+        font-size: 22px;
+    }
+    
+    .btn-login-submit {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .imagen-container {
+        height: 120px;
+    }
+    
+    .imagen-overlay {
+        padding: 6px;
+        font-size: 12px;
+    }
+    
+    .whatsapp-info .fa-whatsapp {
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+    }
+}
+</style>
+
+<script>
+// Funcionalidad para los botones
+document.querySelector('.btn-ver-mas').addEventListener('click', function() {
+    alert('Redirigiendo a más productos...');
+    // window.location.href = '/products';
+});
+
+document.querySelector('.btn-comprar-ahora').addEventListener('click', function() {
+    alert('Redirigiendo al carrito de compras...');
+    // window.location.href = '/checkout';
+});
+
+// Cerrar alertas automáticamente después de 5 segundos
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+});
+</script>

@@ -1,0 +1,116 @@
+<div class="register-page">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h2 class="mb-0">Bienvenido a la Tienda de Mascotas Coco & Luna</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Mostrar mensajes -->
+                    <% if (typeof error !== 'undefined' && error) { %>
+                        <div class="alert alert-danger"><%= error %></div>
+                    <% } %>
+                    
+                    <% if (typeof success !== 'undefined' && success) { %>
+                        <div class="alert alert-success"><%= success %></div>
+                    <% } %>
+                    
+                    <form action="/register" method="POST" id="registerForm">
+                        <!-- Campo Nombre -->
+                        <div class="form-group">
+                            <label class="form-label">Nombre:</label>
+                            <input 
+                                type="text" 
+                                name="nombre"
+                                class="form-control"
+                                placeholder="Ingresar nombre"
+                                required
+                                autocomplete="name"
+                            >
+                        </div>
+
+                        <!-- Campo Correo -->
+                        <div class="form-group">
+                            <label class="form-label">Correo:</label>
+                            <input 
+                                type="email" 
+                                name="email"
+                                class="form-control"
+                                placeholder="Ingresar correo electrónico"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+
+                        <!-- Campo Contraseña -->
+                        <div class="form-group">
+                            <label class="form-label">Contraseña:</label>
+                            <input 
+                                type="password" 
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Ingresar contraseña"
+                                required
+                                autocomplete="new-password"
+                            >
+                        </div>
+
+                        <!-- Campo Confirmar Contraseña -->
+                        <div class="form-group">
+                            <label class="form-label">Confirmación contraseña:</label>
+                            <input 
+                                type="password" 
+                                name="confirmPassword"
+                                id="confirmPassword"
+                                class="form-control"
+                                placeholder="Ingresar confirmación contraseña"
+                                required
+                                autocomplete="new-password"
+                            >
+                        </div>
+
+                        <!-- Botón Registrarse -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-registrarse">
+                                Registrarse
+                            </button>
+                        </div>
+
+                        <!-- Enlace a Login -->
+                        <div class="text-center mt-4">
+                            <p class="mb-0">
+                                ¿Ya tienes una cuenta? 
+                                <a href="/login" class="text-decoration-none fw-bold" style="color: #00AFC4;">
+                                    Iniciar sesión
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validación del formulario
+document.getElementById('registerForm').addEventListener('submit', function(event) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        event.preventDefault();
+        alert('Las contraseñas no coinciden');
+        return false;
+    }
+    
+    if (password.length < 6) {
+        event.preventDefault();
+        alert('La contraseña debe tener al menos 6 caracteres');
+        return false;
+    }
+    
+    return true;
+});
+</script>

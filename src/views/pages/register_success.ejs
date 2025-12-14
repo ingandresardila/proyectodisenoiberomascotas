@@ -1,0 +1,317 @@
+const express = require('express');
+const path = require('path');
+const dotenv = require('dotenv');
+const expressLayouts = require('express-ejs-layouts');
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Simular base de datos en memoria
+let usuarios = [];
+let usuarioActual = null;
+let sesiones = {};
+
+// Middleware para manejar sesiones simples
+app.use((req, res, next) => {
+    // Obtener sessionId de cookie o crear uno nuevo
+    let sessionId = req.cookies?.sessionId || `session_${Date.now()}_${Math.random()}`;
+    
+    if (!sesiones[sessionId]) {
+        sesiones[sessionId] = {};
+    }
+    
+    req.session = sesiones[sessionId];
+    req.sessionId = sessionId;
+    
+    // Establecer cookie
+    res.cookie('sessionId', sessionId, { maxAge: 24 * 60 * 60 * 1000 }); // 1 día
+    
+    next();
+});
+
+// Middleware para verificar autenticación
+const requireAuth = (req, res, next) => {
+    if (req.session && req.session.usuarioId) {
+        const usuario = usuarios.find(u => u.id === req.session.usuarioId);
+        if (usuario) {
+            req.usuario = usuario;
+            return next();
+        }
+    }
+    res.redirect('/');
+};
+
+// ========== RUTAS ==========
+
+// Página de login
+app.get('/', (req, res) => {
+    if (req.session.usuarioId) {
+        return res.redirect('/products');
+    }
+    res.render('pages/login', {
+        title: 'Iniciar Sesión - Mascotas L&C',
+        page: 'login',
+        error: null
+    });
+});
+
+// Procesar login
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    
+    const usuario = usuarios.find(u => u.email === email && u.password === password);
+    
+    if (usuario) {
+        req.session.usuarioId = usuario.id;
+        res.redirect('/products');
+    } else {
+        res.render('pages/login', {
+            title: 'Iniciar Sesión - Mascotas L&C',
+            page: 'login',
+            error: 'Correo o contraseña incorrectos'
+        });
+    }
+});
+
+// Página de registro
+app.get('/register', (req, res) => {
+    if (req.session.usuarioId) {
+        return res.redirect('/products');
+    }
+    res.render('pages/register', {
+        title: 'Registro - Mascotas L&C',
+        page: 'register',
+        error: null,
+        success: null
+    });
+});
+
+// Procesar registro CON ALERTA Y REDIRECCIÓN
+app.post('/register', (req, res) => {
+    const { nombre, email, password, confirmPassword } = req.body;
+    
+    // Validaciones
+    if (password !== confirmPassword) {
+        return res.render('pages/register', {
+            title: 'Registro - Mascotas L&C',
+            page: 'register',
+            error: 'Las contraseñas no coinciden',
+            success: null
+        });
+    }
+    
+    const usuarioExistente = usuarios.find(u => u.email === email);
+    if (usuarioExistente) {
+        return res.render('pages/register', {
+            title: 'Registro - Mascotas L&C',
+            page: 'register',
+            error: 'El correo ya está registrado',
+            success: null
+        });
+    }
+    
+    // Crear nuevo usuario
+    const nuevoUsuario = {
+        id: Date.now().toString(),
+        nombre: nombre.trim(),
+        email: email.trim(),
+        password: password,
+        fechaRegistro: new Date().toISOString()
+    };
+    
+    usuarios.push(nuevoUsuario);
+    
+    // Mostrar página con alerta de éxito y redirección automática
+    res.render('pages/register_success', {
+        title: 'Registro Exitoso - Mascotas L&C',
+        page: 'register',
+        usuarioNombre: nuevoUsuario.nombre
+    });
+});
+
+// Página de éxito de registro (con alerta y redirección)
+app.get('/register/success', (req, res) => {
+    res.render('pages/register_success', {
+        title: 'Registro Exitoso - Mascotas L&C',
+        page: 'register'
+    });
+});
+
+// Página de productos (requiere autenticación)
+app.get('/products', requireAuth, (req, res) => {
+    const usuario = usuarios.find(u => u.id === req.session.usuarioId);
+    
+    if (!usuario) {
+        return res.redirect('/');
+    }
+    
+    const productos = [
+        { 
+            id: 1, 
+            nombre: "Felix Surtido Precio Especial x 8 Sobres", 
+            precio: 20462, 
+            categoria: "Alimento", 
+            tipo: "Gatos",
+            imagen: "https://via.placeholder.com/300x200/4a7c8c/ffffff?text=Felix+Surtido",
+            descripcion: "Alimento húmedo para gatos adultos, variedad de sabores"
+        },
+        { 
+            id: 2, 
+            nombre: "Hills Prescription Diet Gatos Digestive Care i/d Lata 5.5 Oz", 
+            precio: 16133, 
+            categoria: "Alimento", 
+            tipo: "Gatos",
+            imagen: "https://via.placeholder.com/300x200/4a7c8c/ffffff?text=Hills+Diet",
+            descripcion: "Alimento veterinario para problemas digestivos"
+        },
+        { 
+            id: 3, 
+            nombre: "Royal Canin Mini Adult para Perros Pequeños", 
+            precio: 45200, 
+            categoria: "Alimento", 
+            tipo: "Perros",
+            imagen: "https://via.placeholder.com/300x200/4a7c8c/ffffff?text=Royal+Canin",
+            descripcion: "Alimento seco para perros pequeños adultos"
+        },
+        { 
+            id: 4, 
+            nombre: "Cama Ortopédica para Perros Grandes", 
+            precio: 89900, 
+            categoria: "Accesorios", 
+            tipo: "Perros",
+            imagen: "https://via.placeholder.com/300x200/d4a574/ffffff?text=Cama+Ortopedica",
+            descripcion: "Cama ortopédica con memory foam, tamaño grande"
+        },
+        { 
+            id: 5, 
+            nombre: "Juguete Interactivo para Gatos con Hierba Gatera", 
+            precio: 25400, 
+            categoria: "Juguetes", 
+            tipo: "Gatos",
+            imagen: "https://via.placeholder.com/300x200/d4a574/ffffff?text=Juguete+Gatos",
+            descripcion: "Juguete con compartimento para hierba gatera"
+        },
+        { 
+            id: 6, 
+            nombre: "Correa Retráctil para Perros 5m", 
+            precio: 38500, 
+            categoria: "Accesorios", 
+            tipo: "Perros",
+            imagen: "https://via.placeholder.com/300x200/d4a574/ffffff?text=Correa+Retractil",
+            descripcion: "Correa retráctil de 5 metros, resistente al agua"
+        },
+        { 
+            id: 7, 
+            nombre: "Arena Aglomerante para Gatos 10kg", 
+            precio: 42300, 
+            categoria: "Higiene", 
+            tipo: "Gatos",
+            imagen: "https://via.placeholder.com/300x200/f8d568/333333?text=Arena+Gatos",
+            descripcion: "Arena aglomerante con control de olores"
+        },
+        { 
+            id: 8, 
+            nombre: "Shampoo Antipulgas para Perros 500ml", 
+            precio: 28700, 
+            categoria: "Higiene", 
+            tipo: "Perros",
+            imagen: "https://via.placeholder.com/300x200/f8d568/333333?text=Shampoo+Perros",
+            descripcion: "Shampoo antipulgas y garrapatas, pH balanceado"
+        },
+        { 
+            id: 9, 
+            nombre: "Transportadora para Mascotas Tamaño Mediano", 
+            precio: 75600, 
+            categoria: "Accesorios", 
+            tipo: "Ambos",
+            imagen: "https://via.placeholder.com/300x200/d4a574/ffffff?text=Transportadora",
+            descripcion: "Transportadora ventilada, fácil de limpiar"
+        },
+        { 
+            id: 10, 
+            nombre: "Comedero Automático para Mascotas", 
+            precio: 112000, 
+            categoria: "Accesorios", 
+            tipo: "Ambos",
+            imagen: "https://via.placeholder.com/300x200/d4a574/ffffff?text=Comedero+Auto",
+            descripcion: "Comedero automático programable, 4 comidas diarias"
+        }
+    ];
+    
+    res.render('pages/products', {
+        title: 'Productos - Mascotas L&C',
+        page: 'products',
+        productos: productos,
+        usuario: usuario
+    });
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+    if (req.session) {
+        delete sesiones[req.sessionId];
+    }
+    res.redirect('/');
+});
+
+// Ruta de checkout
+app.get('/checkout', requireAuth, (req, res) => {
+    res.render('pages/checkout', {
+        title: 'Carrito - Mascotas L&C',
+        page: 'checkout'
+    });
+});
+
+// Ruta de pago
+app.get('/payment', requireAuth, (req, res) => {
+    res.render('pages/payment', {
+        title: 'Pago - Mascotas L&C',
+        page: 'payment'
+    });
+});
+
+// Confirmar pago
+app.post('/confirmar-pago', requireAuth, (req, res) => {
+    res.send(`
+        <html>
+        <head>
+            <title>¡Compra Exitosa!</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>body { font-family: 'Nuosu SIL', serif; }</style>
+        </head>
+        <body class="text-center py-5">
+            <div class="container">
+                <h1 class="text-success">🎉 ¡Compra Exitosa!</h1>
+                <p class="lead">Tu pedido ha sido procesado correctamente.</p>
+                <p>Total pagado: $36.595</p>
+                <a href="/products" class="btn btn-primary">Volver a productos</a>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en: http://localhost:${PORT}`);
+    console.log(`📝 Rutas disponibles:`);
+    console.log(`   GET  /              - Login`);
+    console.log(`   POST /login         - Procesar login`);
+    console.log(`   GET  /register      - Registro`);
+    console.log(`   POST /register      - Procesar registro`);
+    console.log(`   GET  /products      - Productos (requiere login)`);
+    console.log(`   GET  /logout        - Cerrar sesión`);
+    console.log(`   GET  /checkout      - Carrito`);
+    console.log(`   GET  /payment       - Pago`);
+});

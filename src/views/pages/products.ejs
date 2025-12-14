@@ -1,0 +1,472 @@
+<div class="products-page">
+    <!-- BIENVENIDA CON NOMBRE DE USUARIO EN SUPERIOR DERECHA -->
+    <div class="user-welcome-container mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="mb-1">Artículos para tus mascotas</h2>
+                <p class="text-muted mb-0">Encuentra todo lo que necesitan tus mejores amigos</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <% if (usuario) { %>
+                <div class="user-info-box">
+                    <i class="fas fa-user-circle fa-2x me-2"></i>
+                    <div class="user-details">
+                        <span class="user-greeting">¡Hola,</span>
+                        <span class="user-name"><%= usuario.nombre %>!</span>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTONES DE FILTROS REDONDOS (sin los filtros anteriores) -->
+    <div class="container mb-4">
+        <div class="filtros-nuevos-container">
+            <div class="row justify-content-center mb-3">
+                <div class="col-auto">
+                    <button class="btn-filtro-nuevo adulto">
+                        <i class="fas fa-dog"></i> Adulto
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn-filtro-nuevo disfraces">
+                        <i class="fas fa-tshirt"></i> Disfraces
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn-filtro-nuevo accesorios">
+                        <i class="fas fa-crown"></i> Accesorios
+                    </button>
+                </div>
+            </div>
+            
+            <!-- BUSCADOR CON LUPA -->
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="buscador-container-nuevo">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" 
+                                   class="form-control buscador-input-nuevo" 
+                                   placeholder="¿Qué necesita tu mascota?">
+                            <button class="btn btn-buscar-nuevo">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS -->
+    <div class="container">
+        <div class="row">
+            <% productos.forEach(producto => { %>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card producto-card">
+                    <div class="producto-imagen">
+                        <div class="imagen-placeholder">
+                            <i class="fas fa-paw fa-3x"></i>
+                            <p class="mt-2"><%= producto.categoria %></p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="producto-title"><%= producto.nombre %></h5>
+                        <p class="producto-desc"><%= producto.descripcion %></p>
+                        <div class="producto-meta">
+                            <span class="badge tipo-badge"><%= producto.tipo %></span>
+                            <span class="badge categoria-badge"><%= producto.categoria %></span>
+                        </div>
+                        <div class="producto-precio">
+                            <h4 class="text-primary">$<%= producto.precio.toLocaleString() %></h4>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-agregar-carrito" 
+                                data-id="<%= producto.id %>"
+                                data-nombre="<%= producto.nombre %>"
+                                data-precio="<%= producto.precio %>">
+                            <i class="fas fa-cart-plus"></i> Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- BANNER DESCARGA APP -->
+    <div class="container mt-5">
+        <div class="app-banner-nuevo">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="banner-title">
+                        <i class="fas fa-mobile-alt me-2"></i>
+                        Descarga nuestra app
+                    </h3>
+                    <p class="banner-text">
+                        y disfruta una experiencia más completa junto a tu mascota.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button class="btn-app-download app-store">
+                            <i class="fab fa-apple"></i> App Store
+                        </button>
+                        <button class="btn-app-download google-play">
+                            <i class="fab fa-google-play"></i> Google Play
+                        </button>
+                        <button class="btn-app-download app-gallery">
+                            <i class="fas fa-mobile-alt"></i> App Gallery
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="modalCarrito" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¡Producto agregado!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMensaje">El producto ha sido agregado a tu carrito.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir comprando</button>
+                <a href="/checkout" class="btn btn-primary">Ir al carrito</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ESTILOS PARA PRODUCTS.EJS */
+.user-welcome-container {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.user-info-box {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #00AFC4, #0095a8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0,175,196,0.3);
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-greeting {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.user-name {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* BOTONES DE FILTROS NUEVOS */
+.filtros-nuevos-container {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-filtro-nuevo {
+    background: white;
+    border: 2px solid #00AFC4;
+    border-radius: 25px;
+    padding: 12px 25px;
+    font-weight: 600;
+    color: #333;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-filtro-nuevo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.btn-filtro-nuevo.adulto:hover { background-color: #00AFC4; color: white; }
+.btn-filtro-nuevo.disfraces:hover { background-color: #f8d568; color: #333; }
+.btn-filtro-nuevo.accesorios:hover { background-color: #d4a574; color: white; }
+
+/* BUSCADOR NUEVO */
+.buscador-container-nuevo .input-group {
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.buscador-input-nuevo {
+    border: 2px solid #00AFC4;
+    border-right: none;
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+.input-group-text {
+    background: #00AFC4;
+    border: 2px solid #00AFC4;
+    border-right: none;
+    color: white;
+    padding: 0 20px;
+}
+
+.btn-buscar-nuevo {
+    background: #00AFC4;
+    color: white;
+    border: 2px solid #00AFC4;
+    border-left: none;
+    padding: 0 25px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-buscar-nuevo:hover {
+    background: #0095a8;
+    border-color: #0095a8;
+}
+
+/* PRODUCTOS */
+.producto-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    height: 100%;
+}
+
+.producto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.producto-imagen {
+    height: 180px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagen-placeholder {
+    text-align: center;
+    color: #00AFC4;
+}
+
+.imagen-placeholder i {
+    font-size: 48px;
+}
+
+.producto-title {
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    min-height: 54px;
+}
+
+.producto-desc {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+    min-height: 60px;
+}
+
+.producto-meta {
+    margin-bottom: 15px;
+}
+
+.tipo-badge {
+    background: #00AFC4;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.categoria-badge {
+    background: #f8d568;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.producto-precio h4 {
+    color: #00AFC4;
+    font-weight: 700;
+}
+
+.btn-agregar-carrito {
+    background: #00AFC4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-agregar-carrito:hover {
+    background: #0095a8;
+}
+
+/* BANNER APP NUEVO */
+.app-banner-nuevo {
+    background: linear-gradient(135deg, #00AFC4, #0095a8);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,175,196,0.3);
+}
+
+.banner-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.banner-text {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.btn-app-download {
+    background: white;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-weight: 600;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.btn-app-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .user-info-box {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .btn-filtro-nuevo {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .buscador-input-nuevo {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+    
+    .btn-app-download {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .app-banner-nuevo .row {
+        text-align: center;
+    }
+    
+    .app-banner-nuevo .col-md-4 {
+        margin-top: 15px;
+    }
+}
+</style>
+
+<script>
+// Agregar al carrito con AJAX
+document.querySelectorAll('.btn-agregar-carrito').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        const productName = this.getAttribute('data-nombre');
+        
+        // Enviar al servidor
+        fetch('/agregar-carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productoId: productId,
+                cantidad: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mostrar modal
+                document.getElementById('modalMensaje').textContent = 
+                    `"${productName}" ha sido agregado al carrito.`;
+                
+                const modal = new bootstrap.Modal(document.getElementById('modalCarrito'));
+                modal.show();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al agregar al carrito');
+        });
+    });
+});
+
+// Buscador
+document.querySelector('.btn-buscar-nuevo').addEventListener('click', function() {
+    const query = document.querySelector('.buscador-input-nuevo').value.trim();
+    if (query) {
+        alert(`Buscando productos: "${query}"`);
+        // Aquí implementarías la búsqueda real
+    }
+});
+
+// Botones de filtro
+document.querySelectorAll('.btn-filtro-nuevo').forEach(button => {
+    button.addEventListener('click', function() {
+        const filtro = this.textContent.trim();
+        alert(`Filtrando por: ${filtro}`);
+        // Aquí implementarías el filtrado real
+    });
+});
+
+// Botones de descarga app
+document.querySelectorAll('.btn-app-download').forEach(button => {
+    button.addEventListener('click', function() {
+        const app = this.textContent.trim();
+        alert(`Redirigiendo a ${app}`);
+    });
+});
+</script>

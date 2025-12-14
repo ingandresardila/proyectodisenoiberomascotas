@@ -1,0 +1,20 @@
+{
+  "name": "proyectodisenoiberomascotas",
+  "version": "1.0.0",
+  "description": "Tienda de mascotas C&L",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

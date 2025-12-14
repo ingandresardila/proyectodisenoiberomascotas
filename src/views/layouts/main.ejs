@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nuosu+SIL&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-container">
+            <!-- LOGO A LA IZQUIERDA -->
+            <div class="logo-container">
+                <h1 class="logo">Mascotas <span>L&C</span></h1>
+            </div>
+            
+            <!-- CONTENIDO CENTRAL: MENÚ PARA AMBAS VISTAS -->
+            <nav class="main-menu">
+                <a href="/products">Productos</a>
+                <a href="/checkout">Carrito</a>
+                <a href="#">Acerca de</a>
+                <a href="#">Contacto</a>
+                <% if (usuario) { %>
+                    <a href="/logout">Cerrar Sesión</a>
+                <% } else { %>
+                    <a href="/">Iniciar Sesión</a>
+                <% } %>
+            </nav>
+            
+            <!-- REDES SOCIALES -->
+            <div class="header-social-icons">
+                <a href="https://wa.me/573103547794" class="header-social-icon" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="#" class="header-social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="header-social-icon"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- LÍNEA NARANJA -->
+    <hr class="divider">
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container">
+        <!-- Mostrar mensaje de éxito después de registro -->
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <i class="fas fa-check-circle me-2"></i><%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+        
+        <%- body %>
+    </main>
+    
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p class="copyright-left">
+                @Derechos reservados por Juliana y Andres 2025
+            </p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

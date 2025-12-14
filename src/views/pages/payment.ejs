@@ -1,0 +1,148 @@
+<div class="payment-page">
+    <h2 class="mb-4">Finalizar compra</h2>
+    
+    <div class="row">
+        <!-- Columna izquierda: Resumen -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Resumen de compra</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Felix Surtido Precio Especial x 8 Sobres</h6>
+                        <p class="text-muted">Cantidad: 1</p>
+                        <h5 class="text-end">$ 20.462</h5>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Hills Prescription Diet Gatos Digestive Care i/d Lata 5.5 Oz</h6>
+                        <p class="text-muted">Cantidad: 1</p>
+                        <h5 class="text-end">$ 16.133</h5>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <h4>Total:</h4>
+                        <h3 class="text-success">$ 36.595</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tipo de entrega -->
+            <div class="card shadow mt-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Tipo de entrega</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="entrega" id="entregaInmediata" checked>
+                        <label class="form-check-label fw-bold" for="entregaInmediata">
+                            Entrega inmediata
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="entrega" id="pagoContraEntrega">
+                        <label class="form-check-label fw-bold" for="pagoContraEntrega">
+                            Pago contra entrega
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna derecha: Forma de pago -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Método de pago</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Tarjeta de crédito -->
+                    <div class="mb-4">
+                        <h5>Pagar con tarjeta</h5>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" placeholder="ejemplo@gmail.com">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Información de tarjeta</label>
+                            <input type="text" class="form-control mb-2" placeholder="1234 1234 1234 1234">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="MM / YY">
+                                </div>
+                                <div class="col">
+                                    <input type="text" class="form-control" placeholder="CVC">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nombre del titular de la tarjeta</label>
+                            <input type="text" class="form-control" placeholder="Nombre completo en la tarjeta">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">País o región</label>
+                            <select class="form-select">
+                                <option selected>Colombia</option>
+                                <option>Otro país</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="guardarInfo">
+                            <label class="form-check-label" for="guardarInfo">
+                                Guarda mi información de forma segura para pagar con un solo clic
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-lock"></i> Pagar $36.595
+                        </button>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Otros métodos -->
+                    <div>
+                        <h5 class="mb-3">Selecciona otros medios de pago</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-university"></i> Paga por PSE
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-hand-pointer"></i> Pagos Botón
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-piggy-bank"></i> Bancolombia
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validación básica
+document.querySelector('.btn-success').addEventListener('click', function() {
+    const entregaInmediata = document.getElementById('entregaInmediata').checked;
+    const pagoContraEntrega = document.getElementById('pagoContraEntrega').checked;
+    
+    if (pagoContraEntrega) {
+        alert('¡Pedido confirmado! Pagarás $36.595 contra entrega.');
+    } else {
+        alert('¡Pedido confirmado! Se procesará el pago con tarjeta.');
+    }
+    
+    // Redirigir a página de confirmación (simulada)
+    setTimeout(() => {
+        alert('¡Compra exitosa! Gracias por tu compra.');
+    }, 1000);
+});
+</script>
